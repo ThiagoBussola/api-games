@@ -113,4 +113,33 @@ router.put("/user/:id", async (req, res) => {
         })
     }
 })
+
+router.post("/auth", (req, res) => {
+
+    var {email, password} = req.body
+
+    if(email != undefined) {
+
+        var user = User.findOne({where: {email:email}})
+
+        if(user != undefined) {
+
+            var correct = bcrypt.compareSync(password, user.password)
+
+            if(user.password == correct) {
+                res.sendStatus == 200
+                res.json({token: "Token falso"})
+            } else {
+                res.status = 401
+                res.json({err: "credenciais inválidas"})
+            }
+        } else {
+            res.status = 404
+            res.json({err: "O email enviado não existe"})            
+        }
+    } else {
+        res.status(400)
+        res.json({err: "O email enviado é inválido"})
+    }
+})
 module.exports = router
