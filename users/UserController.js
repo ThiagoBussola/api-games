@@ -93,7 +93,7 @@ router.put("/user/:id", async (req, res) => {
         res.sendStatus(400)
     } else {
         try {
-            User.update({
+            await User.update({
                 name: req.body.name,
                 email: req.body.email,
                 password: bsync.hashSync(req.body.password, 10),
