@@ -15,5 +15,5 @@ const Game = connection.define('games', {
         allowNull: false
     }
 })
-
+//Game.sync({force:true})
 module.exports = Game

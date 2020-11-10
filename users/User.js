@@ -16,5 +16,6 @@ const User = connection.define('users', {
         allowNull: false
     }
 })
+//User.sync({force:true})
 
 module.exports = User

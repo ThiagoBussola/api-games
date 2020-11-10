@@ -6,10 +6,7 @@ const bcrypt = require('bcrypt')
 
 router.get("/users", async (req, res) => {
     try {
-        const usersReturned = await User.findAll({
-            attributes:['name', 'email']
-            
-        })
+        const usersReturned = await User.findAll()
         usersReturned ? res.sendStatus(200).json(usersReturned) : res.sendStatus(204)
     } catch (err) {
         console.log(err)
@@ -127,7 +124,7 @@ router.post("/auth", (req, res) => {
             var correct = bcrypt.compareSync(password, user.password)
 
             if(user.password == correct) {
-                res.sendStatus == 200
+                res.sendStatus = 200
                 res.json({token: "Token falso"})
             } else {
                 res.status = 401
