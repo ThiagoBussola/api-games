@@ -36,7 +36,7 @@ router.post("/game", async (req, res) => {
     const year = req.body.year
     const price = req.body.price
     try {
-        await Game.create({
+       await Game.create({
             title: title,
             year: year,
             price: price

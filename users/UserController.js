@@ -93,19 +93,24 @@ router.put("/user/:id", async (req, res) => {
         res.sendStatus(400)
     } else {
         try {
-            await User.update({
-                name: req.body.name,
-                email: req.body.email,
-                password: bsync.hashSync(req.body.password, 10),
-            },
-                {
-                    where: {
-                        id: id
-                    }
-                }
-            )
+
+            var {name, email, password} = req.body
+
+            if(name != undefined) {
+                await User.update({ name:name }, {where: { id:id  }})
+            }
+            if(email != undefined) {
+                await User.update({ email:email }, {where: { id:id  }})
+            }
+            if(password != undefined) {
+                let salt = bcrypt.genSaltSync(10);
+                let hash = bcrypt.hashSync(password, salt)
+                await User.update({ password: hash }, {where: {id: id}})
+            }
             res.send(200)
+            
         } catch (err) {
+            console.log(err)
             res.sendStatus(404)
         }
     }
