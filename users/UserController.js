@@ -3,9 +3,7 @@ const router = express.Router()
 const User = require('./User')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
-const JWTScret = "testandoAuthJWT"
-
+const JWTSecret = "testandoAuthJWT"
 
 router.get("/users", async (req, res) => {
     try {
@@ -132,7 +130,7 @@ router.post("/auth", async (req, res) => {
 
             if (correct) {
 
-                jwt.sign({id: user.id, email: user.email}, JWTScret, {expiresIn:'48h'}, (err, token) => {
+                jwt.sign({id: user.id, email: user.email}, JWTSecret, {expiresIn:'48h'}, (err, token) => {
                     if(err) {
                         res.send(400)
                         res.json({err: "Falha Interna"})

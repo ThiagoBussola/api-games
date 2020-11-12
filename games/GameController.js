@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Game = require("./Game")
+const auth = require('../middleware/Authentication')
 
 router.get("/games", async (req, res) => {
     try {
@@ -41,7 +42,7 @@ router.post("/game", async (req, res) => {
             year: year,
             price: price
         })
-        res.json(gameCreated)
+        res.status(201).json(gameCreated)
         
     } catch (err) {
         console.log(err)

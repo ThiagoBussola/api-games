@@ -28,7 +28,11 @@ describe("Teste POST game", () => {
             .post('/game')
             .send(game)
             .end((err, res) => {
-                res.should.have.status(200)
+                if(err){
+                    console.log(err)
+                    done(err)
+                }
+                res.should.have.status(201)
                 
                 done()
             })
