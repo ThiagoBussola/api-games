@@ -36,12 +36,13 @@ router.post("/game", async (req, res) => {
     const year = req.body.year
     const price = req.body.price
     try {
-       await Game.create({
+       const gameCreated = await Game.create({
             title: title,
             year: year,
             price: price
         })
-        res.sendStatus(201)
+        res.json(gameCreated)
+        
     } catch (err) {
         console.log(err)
         res.sendStatus(500)

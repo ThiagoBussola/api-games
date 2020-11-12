@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const User = require('./User')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+const JWTScret = "testandoAuthJWT"
 
 
 router.get("/users", async (req, res) => {
@@ -45,7 +48,6 @@ router.post("/user", async (req, res) => {
             if (user == undefined) {
                 let salt = bcrypt.genSaltSync(10);
                 let hash = bcrypt.hashSync(password, salt)
-
 
                 User.create({
                     name: name,
@@ -116,27 +118,35 @@ router.put("/user/:id", async (req, res) => {
     }
 })
 
-router.post("/auth", (req, res) => {
+router.post("/auth", async (req, res) => {
 
     var { email, password } = req.body
 
     if (email != undefined) {
 
-        var user = User.findOne({ where: { email: email } })
+        var user = await User.findOne({ where: { email: email } })
 
         if (user != undefined) {
+            
+            var correct = await bcrypt.compareSync(password, user.password)
 
-            var correct = bcrypt.compareSync(password, user.password)
+            if (correct) {
 
-            if (user.password == correct) {
-                res.sendStatus = 200
-                res.json({ token: "Token falso" })
+                jwt.sign({id: user.id, email: user.email}, JWTScret, {expiresIn:'48h'}, (err, token) => {
+                    if(err) {
+                        res.send(400)
+                        res.json({err: "Falha Interna"})
+                    } else {
+                        res.status(200)
+                        res.json({token: token})
+                    }
+                })
             } else {
-                res.status = 401
+                res.status(401)
                 res.json({ err: "credenciais inválidas" })
             }
         } else {
-            res.status = 404
+            res.status(404)
             res.json({ err: "O email enviado não existe" })
         }
     } else {
