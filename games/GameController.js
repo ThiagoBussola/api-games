@@ -3,7 +3,8 @@ const router = express.Router();
 const Game = require("./Game")
 const auth = require('../middleware/Authentication')
 
-router.get("/games", async (req, res) => {
+// remover auth por hora se precisar rodar o teste
+router.get("/games", auth, async (req, res) => {
     try {
         const gamesReturned = await Game.findAll()
         gamesReturned ? res.status(200).json(gamesReturned) : res.sendStatus(204);
