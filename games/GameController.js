@@ -5,9 +5,28 @@ const auth = require('../middleware/Authentication')
 
 // remover auth por hora se precisar rodar o teste
 router.get("/games", auth, async (req, res) => {
+
+    var HATEOAS = [
+        {
+            href: "http://localhost:3033/game/0",
+            method: "DELETE",
+            rel: "delete_game"
+        },
+        {
+            href: "http://localhost:3033/games/0",
+            method: "GET",
+            rel: "get_game"
+        },
+        {
+            href: "http://localhost:3033/auth",
+            method: "POST",
+            rel: "login"
+        },
+    ]
+
     try {
         const gamesReturned = await Game.findAll()
-        gamesReturned ? res.status(200).json(gamesReturned) : res.sendStatus(204);
+        gamesReturned ? res.status(200).json({games: gamesReturned, _links: HATEOAS}) : res.sendStatus(204);
     } catch (err) {
         console.log(err);
         return res.sendStatus(400)
@@ -16,6 +35,25 @@ router.get("/games", auth, async (req, res) => {
 
 router.get("/games/:id", async (req, res) => {
     var id = parseInt(req.params.id);
+    var HATEOAS = [
+        {
+            href: "http://localhost:3033/game/"+id,
+            method: "DELETE",
+            rel: "delete_game"
+        },
+        {
+            href: "http://localhost:3033/games/"+id,
+            method: "GET",
+            rel: "get_game"
+        },
+        {
+            href: "http://localhost:3033/auth",
+            method: "POST",
+            rel: "login"
+        },
+    ]
+
+
     if (isNaN(id)) {
         res.sendStatus(400)
     } else {
@@ -25,7 +63,7 @@ router.get("/games/:id", async (req, res) => {
                     id: id
                 }
             })
-            res.status(200).json({ game: gamesReturned })
+            res.status(200).json({ game: gamesReturned, _links: HATEOAS })
         } catch (err) {
             console.log(err)
             res.sendStatus(500)
@@ -76,6 +114,25 @@ router.delete("/game/:id", async (req, res) => {
 router.put("/game/:id", async (req, res) => {
     var id = parseInt(req.params.id);
     id = parseInt(id)
+
+    var HATEOAS = [
+        {
+            href: "http://localhost:3033/game/"+id,
+            method: "DELETE",
+            rel: "delete_game"
+        },
+        {
+            href: "http://localhost:3033/game/"+id,
+            method: "PUT",
+            rel: "edit_game"
+        },
+        {
+            href: "http://localhost:3033/games",
+            method: "GET",
+            rel: "get_all_games"
+        },
+    ]
+
     
     if (isNaN(id)) {
         res.sendStatus(400)
