@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Game = require("./Game")
-const auth = require('../middleware/Authentication')
+//const auth = require('../middleware/Authentication')
 
 // remover auth por hora se precisar rodar o teste
-router.get("/games", auth, async (req, res) => {
+router.get("/games", async (req, res) => {
 
     var HATEOAS = [
         {
