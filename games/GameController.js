@@ -23,7 +23,6 @@ router.get("/games", async (req, res) => {
             rel: "login"
         },
     ]
-
     try {
         const gamesReturned = await Game.findAll()
         gamesReturned ? res.status(200).json({games: gamesReturned, _links: HATEOAS}) : res.sendStatus(204);
