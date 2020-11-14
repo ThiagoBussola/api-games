@@ -27,6 +27,7 @@ router.get("/games", async (req, res) => {
     try {
         const gamesReturned = await Game.findAll()
         gamesReturned ? res.status(200).json({games: gamesReturned, _links: HATEOAS}) : res.sendStatus(204);
+        // gamesReturned ? res.status(200).json({games: gamesReturned}) : res.sendStatus(204);
     } catch (err) {
         console.log(err);
         return res.sendStatus(400)
@@ -63,7 +64,8 @@ router.get("/games/:id", async (req, res) => {
                     id: id
                 }
             })
-            res.status(200).json({ game: gamesReturned, _links: HATEOAS })
+            // res.status(200).json({ game: gamesReturned, _links: HATEOAS })
+            res.status(200).json({ game: gamesReturned})
         } catch (err) {
             console.log(err)
             res.sendStatus(500)
@@ -81,7 +83,7 @@ router.post("/game", async (req, res) => {
             year: year,
             price: price
         })
-        res.status(201).json(gameCreated)
+        res.status(201).json({game: gameCreated})
         
     } catch (err) {
         console.log(err)
